@@ -39,9 +39,9 @@ const Home: React.FC = () => {
                     </IonCardHeader>
 
                     <IonCardContent>
-                        Keep close to Nature's heart... and break clear away,
-                        once in awhile, and climb a mountain or spend a week in
-                        the woods. Wash your spirit clean.
+                        Keep close to Nature&apos;s heart... and break clear
+                        away, once in awhile, and climb a mountain or spend a
+                        week in the woods. Wash your spirit clean.
                     </IonCardContent>
                 </IonCard>
 
