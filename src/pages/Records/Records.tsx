@@ -1,90 +1,127 @@
 import {
-    IonButton,
-    IonButtons,
-    IonCard,
-    IonCardContent,
-    IonCardHeader,
-    IonCardSubtitle,
-    IonCardTitle,
-    IonContent,
-    IonHeader,
+    IonCol,
+    IonFab,
+    IonFabButton,
+    IonGrid,
     IonIcon,
     IonItem,
     IonLabel,
-    IonMenuButton,
-    IonPage,
-    IonTitle,
-    IonToolbar,
+    IonList,
+    IonRow,
 } from '@ionic/react'
-import { pin, wifi, wine, warning, walk } from 'ionicons/icons'
+import { add } from 'ionicons/icons'
+import AppPageLayout from '../../components/AppPageLayout'
 import './Records.css'
 
+type RecordCommonType = {
+    id: string
+    title?: string
+    amount: number
+    currency: string
+    date: number
+    tags?: string[]
+}
+
+type RecordIncomeType = RecordCommonType & {
+    type: 'income'
+    account: string
+}
+
+type RecordExpenseType = RecordCommonType & {
+    type: 'expense'
+    account: string
+}
+
+type RecordTransferType = RecordCommonType & {
+    type: 'transfer'
+    accountFrom: string
+    accountTo: string
+}
+
+type RecordDebtType = RecordCommonType & {
+    type: 'debt'
+    account: string
+    dateToPay: number
+    debtor: 'me' | string
+    lender: 'me' | string
+    paid: false
+}
+
+type RecordType =
+    | RecordIncomeType
+    | RecordExpenseType
+    | RecordTransferType
+    | RecordDebtType
+
 const Page: React.FC = () => {
+    const records: RecordType[] = [
+        {
+            id: '12sd123sdd',
+            type: 'debt',
+            account: 'BPI',
+            amount: 5000,
+            currency: 'PHP',
+            date: new Date().getTime() / 1000,
+            dateToPay: new Date().getTime() / 1000,
+            debtor: 'manay',
+            lender: 'me',
+            paid: false,
+        },
+    ]
     return (
-        <IonPage>
-            <IonHeader>
-                <IonToolbar>
-                    <IonButtons slot="start">
-                        <IonMenuButton />
-                    </IonButtons>
-                    <IonTitle>Records</IonTitle>
-                </IonToolbar>
-            </IonHeader>
-
-            <IonContent fullscreen>
-                <IonCard>
-                    <IonCardHeader>
-                        <IonCardSubtitle>Card Subtitle</IonCardSubtitle>
-                        <IonCardTitle>Card Title</IonCardTitle>
-                    </IonCardHeader>
-
-                    <IonCardContent>
-                        Keep close to Nature's heart... and break clear away,
-                        once in awhile, and climb a mountain or spend a week in
-                        the woods. Wash your spirit clean.
-                    </IonCardContent>
-                </IonCard>
-
-                <IonCard>
-                    <IonItem>
-                        <IonIcon icon={pin} slot="start" />
-                        <IonLabel>
-                            ion-item in a card, icon left, button right
-                        </IonLabel>
-                        <IonButton fill="outline" slot="end">
-                            View
-                        </IonButton>
-                    </IonItem>
-
-                    <IonCardContent>
-                        This is content, without any paragraph or header tags,
-                        within an ion-cardContent element.
-                    </IonCardContent>
-                </IonCard>
-
-                <IonCard>
-                    <IonItem href="#" className="ion-activated">
-                        <IonIcon icon={wifi} slot="start" />
-                        <IonLabel>Card Link Item 1 activated</IonLabel>
-                    </IonItem>
-
-                    <IonItem href="#">
-                        <IonIcon icon={wine} slot="start" />
-                        <IonLabel>Card Link Item 2</IonLabel>
-                    </IonItem>
-
-                    <IonItem className="ion-activated">
-                        <IonIcon icon={warning} slot="start" />
-                        <IonLabel>Card Button Item 1 activated</IonLabel>
-                    </IonItem>
-
-                    <IonItem>
-                        <IonIcon icon={walk} slot="start" />
-                        <IonLabel>Card Button Item 2</IonLabel>
-                    </IonItem>
-                </IonCard>
-            </IonContent>
-        </IonPage>
+        <AppPageLayout pageTitle="Records">
+            <IonList>
+                {records.map((record) => {
+                    return (
+                        <IonItem key={record.id}>
+                            <IonGrid>
+                                <IonRow>
+                                    {record.type === 'debt' && (
+                                        <>
+                                            <IonCol>
+                                                <IonLabel>
+                                                    <h2>{record.debtor}</h2>
+                                                </IonLabel>
+                                                <IonLabel>
+                                                    <h3>{record.account}</h3>
+                                                </IonLabel>
+                                                <IonLabel>
+                                                    <p>
+                                                        {record.paid
+                                                            ? new Date(
+                                                                  record.dateToPay *
+                                                                      1000
+                                                              ).toDateString()
+                                                            : 'Paid'}
+                                                    </p>
+                                                </IonLabel>
+                                            </IonCol>
+                                            <IonCol className="ion-text-end">
+                                                <IonLabel>
+                                                    <p>{record.amount}</p>
+                                                </IonLabel>
+                                                <IonLabel>
+                                                    <p>
+                                                        {new Date(
+                                                            record.date * 1000
+                                                        ).toDateString()}
+                                                    </p>
+                                                </IonLabel>
+                                            </IonCol>
+                                        </>
+                                    )}
+                                </IonRow>
+                            </IonGrid>
+                        </IonItem>
+                    )
+                })}
+            </IonList>
+            <IonFab vertical="bottom" horizontal="end" slot="fixed">
+                <IonFabButton>
+                    <IonIcon icon={add} />
+                </IonFabButton>
+            </IonFab>
+        </AppPageLayout>
     )
 }
 

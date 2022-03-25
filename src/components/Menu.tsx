@@ -17,14 +17,16 @@ import {
     bookmarkOutline,
     heartOutline,
     heartSharp,
+    homeOutline,
+    homeSharp,
+    listOutline,
+    listSharp,
     paperPlaneOutline,
     paperPlaneSharp,
     trashOutline,
     trashSharp,
     warningOutline,
     warningSharp,
-    listOutline,
-    listSharp,
 } from 'ionicons/icons'
 import './Menu.css'
 
@@ -36,6 +38,12 @@ interface AppPage {
 }
 
 const appPages: AppPage[] = [
+    {
+        title: 'Home',
+        url: '/',
+        iosIcon: homeOutline,
+        mdIcon: homeSharp,
+    },
     {
         title: 'Records',
         url: '/records',
