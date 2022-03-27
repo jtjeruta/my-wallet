@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import {
     IonCol,
     IonFab,
@@ -11,63 +12,28 @@ import {
 } from '@ionic/react'
 import { add } from 'ionicons/icons'
 import AppPageLayout from '../../components/AppPageLayout'
+import {
+    RecordContextProvider,
+    useRecordContext,
+} from '../../contexts/RecordContext'
 import './Records.css'
 
-type RecordCommonType = {
-    id: string
-    title?: string
-    amount: number
-    currency: string
-    date: number
-    tags?: string[]
-}
+const RecordsPageContent: React.FC = () => {
+    const { records, listRecords } = useRecordContext()
+    const [loading, setLoading] = useState<boolean>(true)
 
-type RecordIncomeType = RecordCommonType & {
-    type: 'income'
-    account: string
-}
+    useEffect(() => {
+        async function init() {
+            setLoading(true)
+            await listRecords()
+            setLoading(false)
+        }
 
-type RecordExpenseType = RecordCommonType & {
-    type: 'expense'
-    account: string
-}
+        init()
+    }, [])
 
-type RecordTransferType = RecordCommonType & {
-    type: 'transfer'
-    accountFrom: string
-    accountTo: string
-}
+    if (loading) return <p>Loading...</p>
 
-type RecordDebtType = RecordCommonType & {
-    type: 'debt'
-    account: string
-    dateToPay: number
-    debtor: 'me' | string
-    lender: 'me' | string
-    paid: false
-}
-
-type RecordType =
-    | RecordIncomeType
-    | RecordExpenseType
-    | RecordTransferType
-    | RecordDebtType
-
-const Page: React.FC = () => {
-    const records: RecordType[] = [
-        {
-            id: '12sd123sdd',
-            type: 'debt',
-            account: 'BPI',
-            amount: 5000,
-            currency: 'PHP',
-            date: new Date().getTime() / 1000,
-            dateToPay: new Date().getTime() / 1000,
-            debtor: 'manay',
-            lender: 'me',
-            paid: false,
-        },
-    ]
     return (
         <AppPageLayout pageTitle="Records">
             <IonList>
@@ -125,4 +91,10 @@ const Page: React.FC = () => {
     )
 }
 
-export default Page
+const RecordsPage: React.FC = () => (
+    <RecordContextProvider>
+        <RecordsPageContent />
+    </RecordContextProvider>
+)
+
+export default RecordsPage

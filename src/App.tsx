@@ -1,3 +1,4 @@
+import { FC } from 'react'
 import {
     IonApp,
     IonRouterOutlet,
@@ -32,7 +33,7 @@ import './theme/variables.css'
 
 setupIonicReact()
 
-const App: React.FC = () => {
+const App: FC = () => {
     return (
         <IonApp>
             <IonReactRouter>
